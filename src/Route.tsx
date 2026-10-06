@@ -6,7 +6,7 @@ import {RouteType} from "./FlightTable";
 
 type RouteProps = {
     route: RouteType
-    toggleFTIsBooked: (flightTableID: string, routeID: string) => void;
+    toggleFTIsBooked: (flightTableID: string, routeID: string, isBooked: boolean) => void;
     flightTableID: string;
     updateFTRoutesFrom: (flightID: string, routeID: string, newFrom: string) => void;
     updateFTRoutesTo: (flightID: string, routeID: string, newTo: string) => void;
@@ -23,19 +23,20 @@ export const Route = ({
                           removeFTRoute
                       }: RouteProps) => {
     const handleRemoveFTRoute = () => {
-        alert('Почини меня, чтобы я могла удалять рейс. Сделай это через универсальную кнопку.')
+        removeFTRoute(flightTableID, route.id)
     };
 
-    const handleUpdateRouteFrom = () => {
-        // updateFTRoutesFrom()
+    const handleUpdateRouteFrom = (newFrom: string) => {
+        updateFTRoutesFrom(flightTableID, route.id, newFrom);
     };
 
-    const handleUpdateRouteTo = () => {
-        //updateFTRoutesTo();
+    const handleUpdateRouteTo = (newTo: string) => {
+        updateFTRoutesTo(flightTableID, route.id, newTo);
     }
 
-    const handleToggleFTIsBooked = () => {
-        alert('Во мне куча ошибок!')
+    const handleToggleFTIsBooked = (isBooked: boolean) => {
+        // alert('Во мне куча ошибок!')
+        toggleFTIsBooked(flightTableID, route.id, isBooked)
     }
 
     return (
@@ -44,20 +45,21 @@ export const Route = ({
                 <tbody>
                 <tr className={styles.ftRow}>
                     <td className={styles.ftCell}>
-                        <button onClick={handleRemoveFTRoute}>X</button>
+                        {/*<button onClick={()=>handleRemoveFTRoute(route.id)}>X</button>*/}
+                        <Button title={'x'} onClick={handleRemoveFTRoute}/>
                     </td>
                     <td className={`${styles.ftCell} ${styles.pointerCursor}`}>
-                        <UpdateItem oldTitle={route.from} callBack={() => 'handleUpdateRouteFrom'}/>
+                        <UpdateItem oldTitle={route.from} callBack={handleUpdateRouteFrom}/>
                     </td>
                     <td className={`${styles.ftCell} ${styles.pointerCursor}`}>
                         ➔
                     </td>
                     <td className={`${styles.ftCell} ${styles.pointerCursor}`}>
-                        <UpdateItem oldTitle={route.to} callBack={() => 'handleUpdateRouteTo'}/>
+                        <UpdateItem oldTitle={route.to} callBack={handleUpdateRouteTo}/>
                     </td>
                     <td className={styles.checkboxContainer}>
                         <label>
-                            <CheckBox isDone={route.isBooked} updateCheckBox={handleToggleFTIsBooked}/>
+                            <CheckBox isDone={route.isBooked} updateCheckBox={(isDone)=>handleToggleFTIsBooked(isDone)}/>
                             {route.isBooked ? ' Booked' : ' Available'}
                         </label>
                     </td>
